@@ -2,10 +2,12 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 20:46:10
+ * @Last Modified time: 2020-05-17 22:00:27
  *
  * 《处理日期相关的一些常用方法》
  */
+
+export const ONE_DAY = 24 * 60 * 60 * 1000
 
 /**
  * 十位补零
@@ -38,16 +40,16 @@ export const getMonthNum = (year = new Date().getFullYear(), month) => {
 }
 
 /**
- *  返回两个日期之间的差异 (以天为值)。
+ * 返回两个日期之间的差异 (以天为值)。
  * "计算Date对象之间的差异 (以天为单位)。"
  * @param {传入日期对象} obj
  * @example getDaysDiffBetweenDates('2018-05-05', '2018-05-14') -> 9
  */
 export const getDaysDiffBetweenDates = (dateInitial, dateFinal) =>
-  (new Date(dateFinal) - new Date(dateInitial)) / (1000 * 3600 * 24)
+  (new Date(dateFinal) - new Date(dateInitial)) / ONE_DAY
 
 /**
- *  将时间戳转换为日期
+ *  时间戳转换为日期
  * "使用Date(), 将时间戳转换转换为可读格式)."
  * @param {传入的时间戳} timestamp
  * @param {布尔值是否需要时钟} needTime
@@ -65,14 +67,45 @@ export const timestampToTime = (timestamp, needTime = false, format = 1) => {
   let h = padTime(date.getHours())
   let m = padTime(date.getMinutes())
   let s = padTime(date.getSeconds())
-
   switch (format) {
     case 1:
       return needTime ? `${Y}-${M}-${D} ${h}:${m}:${s}` : `${Y}-${M}-${D}`
     case 2:
       return needTime ? `${D}/${M}/${Y} ${h}:${m}:${s}` : `${D}/${M}/${Y}`
+    case 3:
+      return needTime ? `${Y}年${M}月${D}日 ${h}:${m}:${s}` : `${Y}年${M}月${D}`
   }
 }
+
+/**
+ * 判断是否为闰年
+ * @param  {number} year 要判断的年份
+ * @return {boolean} 返回布尔值
+ */
+export const isLeapYear = year => !(year % (year % 100 ? 4 : 400))
+
+/**
+ * 返回两个年份之间的闰年
+ * @param  {number} start 开始年份
+ * @param  {number} end 结束年份
+ * @return {array}  arr 返回符合闰年的数组
+ */
+export const getLeapYears = (start, end) => {
+  const arr = []
+  for (var i = start; i < end; i++) {
+    if (isLeapYear(i)) {
+      arr.push(i)
+    }
+  }
+  return arr
+}
+
+/**
+ * 日期转时间戳
+ * @param {String} time - 日期字符串，如'2018-8-8','2018,8,8','2018/8/8'
+ * @returns {Number} 返回值为时间毫秒值
+ */
+export const timeToTimestamp = time => new Date(time).getTime()
 
 /**
  *  根据日期返回星期几
@@ -97,11 +130,8 @@ export const dateToWeek = dateString => {
  * @returns Boolean
  * @example compareDate('2007-2-2 7:30', '2007-1-31 8:30') -> true
  */
-export const compareDate = (d1, d2) => {
-  d1 = new Date(d1.replace(/-/g, "'/"))
-  d2 = new Date(d2.replace(/-/g, "'/"))
-  return d1 > d2
-}
+export const compareDate = (d1, d2) =>
+  new Date(d1.replace(/-/g, "'/")) > new Date(d2.replace(/-/g, "'/"))
 
 /**
  * 获取今天的日期
@@ -115,14 +145,41 @@ export const getToday = () => {
 }
 
 /**
+ * 验证一个日期是不是今天
+ * @param  {string} val 需要验证的日期
+ * @return {boolean} 返回布尔值
+ */
+export const isToday = val => new Date().toLocaleDateString() == new Date(val).toLocaleDateString()
+
+/**
+ * 验证一个日期是不是昨天
+ * @param  {string} val 需要验证的日期
+ * @return {boolean} 返回布尔值
+ */
+export const isYesterday = val => {
+  const now = new Date()
+  const yesterday = new Date(now - ONE_DAY)
+  const test = new Date(val)
+  if (
+    yesterday.getYear() === test.getYear() &&
+    yesterday.getMonth() === test.getMonth() &&
+    yesterday.getDate() === test.getDate()
+  ) {
+    return true
+  } else {
+    return false
+  }
+}
+
+/**
  * 获取上一周的日期,默认前7天的
  * @param {前几天的} pre
  * @returns '2018-05-04'
  * @example getPreWeekDay() -> '2018-04-27'
  */
-export const getPreWeekDay = (pre = 7) => {
+export const getPreWeekDay = (prev = 7) => {
   let now = new Date()
-  let oneWeekTime = pre * 24 * 60 * 60 * 1000
+  let oneWeekTime = prev * ONE_DAY
   let lastWeekDay = new Date(now - oneWeekTime)
   return (
     lastWeekDay.getFullYear() +
@@ -143,13 +200,12 @@ export const getPreWeekDay = (pre = 7) => {
 export const getBetweenDateScope = (start, end) => {
   start = timeTotimestamp(start) // 将日期转为时间戳
   end = timeTotimestamp(end) // 将日期转为时间戳
-  let oneDay = 24 * 60 * 60 * 1000
   let arr = []
 
   if (start > end) throw Error('1参日期晚于2参日期')
   for (let i = start; i <= end; ) {
     arr.push(timestampToTime(i))
-    i += oneDay
+    i += ONE_DAY
   }
   return arr
 }
@@ -164,9 +220,8 @@ export const getBetweenDateScope = (start, end) => {
 export const getDateRange = (count = 2, start = getToday()) => {
   let today = new Date(start)
   let targetDay = new Date()
-  let oneDay = 24 * 60 * 60 * 1000
   today.setTime(today.getTime())
-  targetDay.setTime(targetDay.getTime() - oneDay * (count - 1))
+  targetDay.setTime(targetDay.getTime() - ONE_DAY * (count - 1))
   today = timestampToTime(today)
   targetDay = timestampToTime(targetDay)
   return { today, targetDay }
@@ -197,6 +252,46 @@ export const getPreMontAllDate = (number = 0, date) => {
   return result
 }
 
+/***
+ *  返回本周第一天的时间
+ *  @return {String} WeekFirstDay
+ */
+export function getWeekFirstDay() {
+  const now = new Date()
+  const WeekFirstDay = new Date(now - (now.getDay() - 1) * ONE_DAY)
+  return WeekFirstDay
+}
+
+/***
+ *  返回本周最后一天的时间
+ *  @return {String} WeekLastDay
+ */
+export function getWeekLastDay() {
+  let now = new Date()
+  let WeekFirstDay = new Date(now - (now.getDay() - 1) * ONE_DAY)
+  let WeekLastDay = new Date((WeekFirstDay / 1000 + 6 * 86400) * 1000)
+  return WeekLastDay
+}
+
+/***
+ *  返回本月第一天的时间
+ *  @return {String} MonthFirstDay
+ */
+export function getMonthFirstDay() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth())
+}
+
+/***
+ *  返回本月最后一天的时间
+ *  @return {String} MonthLastDay
+ */
+export function getMonthLastDay() {
+  const now = new Date()
+  const n = new Date(now.getFullYear(), now.getMonth() + 1)
+  return new Date(n - ONE_DAY)
+}
+
 /**
  * 获取倒推几周的每个礼拜一和礼拜日
  * @param count 传入几周就返回几周，默认是上一周
@@ -204,14 +299,13 @@ export const getPreMontAllDate = (number = 0, date) => {
  * @example getPreWeeks(2)->[{monday: "2018-04-23", sunday: "2018-04-29"},{monday: "2018-04-16", sunday: "2018-04-22"}]
  */
 export const getPreWeeks = (count = 1) => {
-  let thisWeek = 8 // 因为包含"今天"，所以第一周算8天
-  let days = []
-  let lastWeekDays = []
+  const thisWeek = 8 // 因为包含"今天"，所以第一周算8天
+  const days = []
 
   for (let i = 0; i < count; i++) {
     days.push(thisWeek + 7 * i)
   }
-  lastWeekDays = days.map(item => getDateRange(item).targetDay)
+  const lastWeekDays = days.map(item => getDateRange(item).targetDay)
   return lastWeekDays.map(item => {
     const { monday, sunday } = getWeekStartEnd(item)
     return { monday, sunday }
@@ -224,14 +318,13 @@ export const getPreWeeks = (count = 1) => {
  * @returns  { monday, sunday } 礼拜一和礼拜日
  * @example getWeekStartEnd('2018-05-05')->{monday: "2018-04-30", sunday: "2018-05-06"}
  */
-export const getWeekStartEnd = (date = '2018-01-01') => {
-  if (!date) return
-  let now = new Date(date)
-  let nowTime = now.getTime()
-  let day = now.getDay()
-  let oneDayTime = 24 * 60 * 60 * 1000
-  let MondayTime = nowTime - (day - 1) * oneDayTime
-  let SundayTime = nowTime + (7 - day) * oneDayTime
+export const getWeekStartEnd = date => {
+  if (!date) return new Error('日期参数未传')
+  const now = new Date(date)
+  const nowTime = now.getTime()
+  const day = now.getDay()
+  const MondayTime = nowTime - (day - 1) * ONE_DAY
+  const SundayTime = nowTime + (7 - day) * ONE_DAY
   let monday = new Date(MondayTime) // 礼拜一
   let sunday = new Date(SundayTime) // 礼拜日
   monday.setTime(monday.getTime())
@@ -243,7 +336,7 @@ export const getWeekStartEnd = (date = '2018-01-01') => {
 }
 
 /**
- * 获取当月的第一天和最后一天
+ * 获取指定日期当月的第一天和最后一天
  * @param {string} [date='2018-01-01']  传入日期
  * @returns {firstDay, lastDay}  第一天和最后一天
  * @example getMonthStartEnd('2018-05-05')->{firstDay: "2018-05-01", lastDay: "2018-05-31"}
