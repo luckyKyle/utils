@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 20:52:52
+ * @Last Modified time: 2020-05-17 21:24:09
  *
  * 《处理数组相关的一些常用方法》
  */
@@ -67,7 +67,7 @@ export const objSum = (obj, key) => {
  * 数组求和
  * @param {Object} arrObj 数组对象
  * @param {String} key 数组对应的 key 值
- * @example sum([1, 2, 3]) -> 6
+ * @example sum([1, 2, 3]) // 6
  */
 export const sum = arr => {
   return arr.reduce((prev, cur) => prev + cur, 0)
@@ -88,4 +88,43 @@ export const getSort = (arr, ascendFlag = true) => {
   return arr.sort((a, b) => {
     return ascendFlag ? a - b : b - a
   })
+}
+
+/**
+ * 统计数组中相同项的个数
+ * @param {Array} arr  数组
+ */
+export const getTimes = arr =>
+  arr.reduce((obj, name) => {
+    obj[name] = obj[name] ? ++obj[name] : 1
+    return obj
+  }, {})
+
+/**
+ * 将数组平铺到指定深度
+ * 使用递归，为每个深度级别 depth 递减 1 。
+ * 基本情况下，depth 等于 1 停止递归。 省略第二个参数，depth 只能平铺到 1 (单层平铺) 的深度。
+ * @param {Array} arr  数组
+ * @example flatten([1, [2], 3, 4])   // [1, 2, 3, 4]
+ * @example flatten([1, [2, [3, [4, 5], 6], 7], 8], 2)   // [1, 2, 3, [4, 5], 6, 7, 8]
+ */
+export const flatten = (arr, depth = 1) =>
+  depth != 1
+    ? arr.reduce((a, v) => a.concat(Array.isArray(v) ? flatten(v, depth - 1) : v), [])
+    : arr.reduce((a, v) => a.concat(v), [])
+
+/**
+ * 数组乱序
+ * @param {array} arr
+ */
+export function arrScrambling(array) {
+  let index = array.length
+  while (index) {
+    index -= 1
+    let randomIndex = Math.floor(Math.random() * index)
+    let middleware = array[index]
+    array[index] = array[randomIndex]
+    array[randomIndex] = middleware
+  }
+  return array
 }
