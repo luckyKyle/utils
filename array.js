@@ -9,48 +9,45 @@
 
 /**
  * 数组并集,只支持一维数组
- * @param {Array} arrOne
- * @param {Array} arrTwo
+ * @param {Array} arr1
+ * @param {Array} arr2
  * @example andSet([1,2,3],[3,5,6]) -> [1,2,3,5,6]
  */
-export const andSet = (arrOne, arrTwo) => {
-  return arrOne.concat(arrTwo.filter(v => !arrOne.includes(v)))
+export const andSet = (arr1, arr2) => {
+  return arr1.concat(arr2.filter(v => !arr1.includes(v)))
 }
 
 /**
  * 数组交集,只支持一维数组
- * @param {Array} arrOne
- * @param {Array} arrTwo
+ * @param {Array} arr1
+ * @param {Array} arr2
  * @example intersection([1,2,3],[3,5,6]) -> [3]
  */
-export const intersection = (arrOne, arrTwo) => {
-  return arrOne.filter(v => arrTwo.includes(v))
-}
+export const intersection = (arr1, arr2) => arr1.filter(v => arr2.includes(v))
 
 /**
  * 数组差集,只支持一维数组
- * @param {Array} arrOne
- * @param {Array} arrTwo
+ * @param {Array} arr1
+ * @param {Array} arr2
  * @example difference([1, 2, 3] [2, 4, 5]) -> [1,3,4,5]
  */
-export const difference = (arrOne, arrTwo) => {
-  return arrOne.concat(arrTwo).filter(v => !arrOne.includes(v) || !arrTwo.includes(v))
-}
+export const difference = (arr1, arr2) =>
+  arr1.concat(arr2).filter(v => !arr1.includes(v) || !arr2.includes(v))
 
 /**
  * 两个数组合并成一个对象数组,考虑到复杂度,所以目前支持两个一维数组
- * @param {Array} arrOne
- * @param {Array} arrTwo
- * @param {oneKey} oneKey 选填,如果两个都未传,直接以 arrOne 的值作为 key,arrTwo 作为 value
+ * @param {Array} arr1
+ * @param {Array} arr2
+ * @param {oneKey} oneKey 选填,如果两个都未传,直接以 arr1 的值作为 key,arr2 作为 value
  * @param {twoKey} twoKey
  */
-export const arrTwoToArrObj = (arrOne, arrTwo, oneKey, twoKey) => {
+export const arr2ToArrObj = (arr1, arr2, oneKey, twoKey) => {
   if (!oneKey && !twoKey) {
-    return arrOne.map((oneKey, i) => ({ [oneKey]: arrTwo[i] }))
-    // 或者,此方法针对将 arrTwo 的索引作为 key 的情况,arrTwo 值会覆盖 arrOne
-    // return Object.assign({}, arrOne, arrTwo)
+    return arr1.map((oneKey, i) => ({ [oneKey]: arr2[i] }))
+    // 或者,此方法针对将 arr2 的索引作为 key 的情况,arr2 值会覆盖 arr1
+    // return Object.assign({}, arr1, arr2)
   } else {
-    return arrOne.map((oneKey, i) => ({ oneKey, twoKey: arrTwo[i] }))
+    return arr1.map((oneKey, i) => ({ oneKey, twoKey: arr2[i] }))
   }
 }
 
@@ -59,9 +56,7 @@ export const arrTwoToArrObj = (arrOne, arrTwo, oneKey, twoKey) => {
  * @param {Object} arrObj 数组对象
  * @param {String} key 数组对应的 key 值
  */
-export const objSum = (obj, key) => {
-  return obj.reduce((prev, cur) => prev + cur[key], 0)
-}
+export const objSum = (obj, key) => obj.reduce((prev, cur) => prev + cur[key], 0)
 
 /**
  * 数组求和
@@ -69,9 +64,7 @@ export const objSum = (obj, key) => {
  * @param {String} key 数组对应的 key 值
  * @example sum([1, 2, 3]) // 6
  */
-export const sum = arr => {
-  return arr.reduce((prev, cur) => prev + cur, 0)
-}
+export const sum = arr => arr.reduce((prev, cur) => prev + cur, 0)
 
 /**
  * 数组最大值
@@ -82,14 +75,9 @@ export const getMax = arr => Math.max(...arr)
 /**
  * 数组排序
  * @param {Array} arr  数组
- * @param {Boolean} ascendFlag   升序,默认为 true
+ * @param {Boolean} ascendFlag  默认升序
  */
-export const getSort = (arr, ascendFlag = true) => {
-  return arr.sort((a, b) => {
-    return ascendFlag ? a - b : b - a
-  })
-}
-
+export const getSort = (arr, ascendFlag = true) => arr.sort((a, b) => (ascendFlag ? a - b : b - a))
 /**
  * 统计数组中相同项的个数
  * @param {Array} arr  数组

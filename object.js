@@ -46,9 +46,7 @@ export const isEqual = (oneObj, twoObj) => {
  * 对象有循环引用,会报错
  * @param {Object}  obj 克隆的对象
  */
-export const cloneDeep = obj => {
-  return clone(obj)
-}
+export const cloneDeep = obj => clone(obj)
 
 const isType = (obj, type) => {
   if (typeof obj !== 'object') return false

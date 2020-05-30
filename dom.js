@@ -8,29 +8,6 @@
  */
 
 /**
- * 将字符串复制到黏贴版
- * @param  str 需要复制的文字
- * eg: copyToClipboard('success!')
- */
-export const copyToClipboard = (str = '') => {
-  const el = document.createElement('textarea')
-  el.value = str
-  el.setAttribute('readonly', '')
-  el.style.position = 'absolute'
-  el.style.left = '-9999px'
-  document.body.appendChild(el)
-  const selected =
-    document.getSelection().rangeCount > 0 ? document.getSelection().getRangeAt(0) : false
-  el.select()
-  document.execCommand('copy')
-  document.body.removeChild(el)
-  if (selected) {
-    document.getSelection().removeAllRanges()
-    document.getSelection().addRange(selected)
-  }
-}
-
-/**
  * 隐藏所有指定标签
  * 例: hide(document.querySelectorAll('img'))
  */
@@ -50,6 +27,28 @@ export const elementContains = (parent, child) => parent !== child && parent.con
  * @param { string } ruleName  指定元素的名称
  */
 export const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName]
+
+/**
+ * 检查元素是否具有指定的类
+ * @param {dom}el 指定元素
+ * @param {string}className 类名
+ * @example hasClass(document.querySelector('p.special'), 'special') // true
+ */
+
+export const hasClass = (el, className) => el.classList.contains(className)
+
+/**
+ * 获取所有图像
+ * @param {dom}el 指定元素
+ * @param {string}includeDuplicates 是否需要排除重复元素
+ * @example getImages(document, true); // ['image1.jpg', 'image2.png', 'image1.png', '...']
+ * @example getImages(document, false); // ['image1.jpg', 'image2.png', '...']
+ */
+
+export const getImages = (el, includeDuplicates = false) => {
+  const images = [...el.getElementsByTagName('img')].map(img => img.getAttribute('src'))
+  return includeDuplicates ? images : [...new Set(images)]
+}
 
 // 获取窗口可视范围的高度
 export function getClientHeight() {
@@ -75,6 +74,7 @@ export function getPageViewWidth() {
   return a.clientWidth
 }
 
+// 获取页面宽度
 export function getPageWidth() {
   let g = document,
     a = g.body,
@@ -136,7 +136,7 @@ export function launchFullscreen(element) {
 
 /**
  * 关闭全屏
- * @param {*} element
+ * @param {dom} element
  */
 export function exitFullscreen() {
   if (document.exitFullscreen) {

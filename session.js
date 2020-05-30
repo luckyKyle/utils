@@ -21,10 +21,7 @@ export const setSession = (key, value) => {
  * sessionStorage 获取
  * @param {String} key  属性
  */
-export const getSession = key => {
-  return window.sessionStorage.getItem(key)
-}
-
+export const getSession = key => window.sessionStorage.getItem(key)
 /**
  * sessionStorage 删除
  * @param {String} key  属性

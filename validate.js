@@ -67,11 +67,11 @@ export const isVertical = () => window.orientation === 180 || window.orientation
 // 横屏状态
 export const isLandscape = () => window.orientation === 90 || window.orientation === -90
 
-/**
+/************************
  * *  *  *  *  *  *  *
  * 使用正则判断业务场景
  * *  *  *  *  *  *  *
- * **/
+ ***********************/
 
 /**
  * 验证中文

@@ -32,18 +32,14 @@ export function trim(str, type = 1) {
  * @param {String} str 字符
  * @param {String} value 字符
  */
-export const include = (str, value) => {
-  return str.includes(value)
-}
+export const include = (str, value) => str.includes(value)
 
 /**
  * 判断字符是否以某个字符开头
  * @param {String} str 字符
  * @param {String} value 字符
  */
-export const beginWith = (str, value) => {
-  return str.indexOf(value) === 0
-}
+export const beginWith = (str, value) => str.indexOf(value) === 0
 
 /**
  * 全局替换某个字符为另一个字符
@@ -51,25 +47,7 @@ export const beginWith = (str, value) => {
  * @param {String} valueOne 包含的字符
  * @param {String} valueTwo 要替换的字符,选填
  */
-export const replace = (str, valueOne, valueTwo) => {
-  return str.replace(new RegExp(valueOne, 'g'), valueTwo)
-}
-
-/**
- * 将字母全部转化成大写
- * @param {String} str 字符
- */
-export const toCapital = str => {
-  return str.toUpperCase()
-}
-
-/**
- * 将字母全部转化成小写
- * @param {String} str 字符
- */
-export const toLowercase = str => {
-  return str.toLowerCase()
-}
+export const replace = (str, valueOne, valueTwo) => str.replace(new RegExp(valueOne, 'g'), valueTwo)
 
 /**
  * 将字母全部转化成以大写开头
