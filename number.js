@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 21:29:35
+ * @Last Modified time: 2020-06-07 21:43:04
  *
  * 《处理数字类型相关的一些常用方法》
  */
@@ -12,7 +12,9 @@
  * @param { number } min
  * @param { number } max
  */
-export const randomNum = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min
+export function randomNum(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 
 export function randomNumInteger(min, max) {
   switch (arguments.length) {
@@ -30,4 +32,6 @@ export function randomNumInteger(min, max) {
  * @param { number } num
  * @example formatMoney(10000) -> 10,000
  */
-export const formatMoney = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+export function formatMoney(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}

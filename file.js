@@ -2,13 +2,13 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 21:32:03
+ * @Last Modified time: 2020-06-07 21:42:15
  *
  * 《处理文件(上传下载)相关的一些常用方法》
  */
 
 // 下载文件
-export const saveFile = (data, filename) => {
+export function saveFile(data, filename) {
   let blob = new Blob([data])
   if (window.navigator.msSaveOrOpenBlob) {
     navigator.msSaveBlob(blob, filename)
@@ -29,10 +29,11 @@ export const saveFile = (data, filename) => {
  * 格式化文件单位
  * @param {String || Number} size  文件大小(kb)
  */
-export const fileFormatSize = size => {
-  var i
-  var unit = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
-  for (i = 0; i < unit.length && size >= 1024; i++) {
+export function fileFormatSize(size) {
+  let i
+  let unit = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
+  let length = unit.length
+  for (i = 0; i < length && size >= 1024; i++) {
     size /= 1024
   }
   return (Math.round(size * 100) / 100 || 0) + unit[i]
@@ -43,7 +44,7 @@ export const fileFormatSize = size => {
  *  @param { base64 } base64
  *  @param { string } filename 转换后的文件名
  */
-export const base64ToFile = (base64, filename) => {
+export function base64ToFile(base64, filename) {
   let arr = base64.split(',')
   let mime = arr[0].match(/:(.*?);/)[1]
   let suffix = mime.split('/')[1] // 图片后缀
@@ -60,7 +61,7 @@ export const base64ToFile = (base64, filename) => {
  *  Base64格式转Blob格式
  *  @param { base64 } base64
  */
-export const base64ToBlob = base64 => {
+export function base64ToBlob(base64) {
   let arr = base64.split(','),
     mime = arr[0].match(/:(.*?);/)[1],
     bstr = atob(arr[1]),
@@ -77,7 +78,7 @@ export const base64ToBlob = base64 => {
  *  @param { blob } blob
  *  @param { string } fileName
  */
-export const blobToFile = (blob, fileName) => {
+export function blobToFile(blob, fileName) {
   blob.lastModifiedDate = new Date()
   blob.name = fileName
   return blob
@@ -87,10 +88,10 @@ export const blobToFile = (blob, fileName) => {
  * file转base64
  * @param { * } file 图片文件
  */
-export const fileToBase64 = file => {
+export function fileToBase64(file) {
   let reader = new FileReader()
   reader.readAsDataURL(file)
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     return e.target.result
   }
 }

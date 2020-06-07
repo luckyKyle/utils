@@ -3,7 +3,7 @@
  * @param  str 需要复制的文字
  * @example copyToClipboard('success!')
  */
-export const copyToClipboard = (str = '') => {
+export function copyToClipboard(str = '') {
   const el = document.createElement('textarea')
   el.value = str
   el.setAttribute('readonly', '')

@@ -39,7 +39,7 @@ export const showConfirm = (str = '', title = '确定删除？', type = 'warning
  * @example [validator(' 请输入姓名 ')]
  * @example [validator(' 请输入姓名 '),()=>{}]
  */
-export const validator = (message = '', validator) => {
+export function validator(message = '', validator) {
   const obj = { required: true, trigger: 'blur' }
   if (validator instanceof Function) {
     return { ...obj, validator }
@@ -53,7 +53,7 @@ export const validator = (message = '', validator) => {
  * @param {*} ref el-form上挂载的ref引用属性名称
  * @returns Boolean
  */
-export const checkForm = ref => {
+export function checkForm(ref) {
   let isPass = false
   ref.validate(valid => {
     if (!valid) {

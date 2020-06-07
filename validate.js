@@ -16,8 +16,17 @@ const toString = Object.prototype.toString
 // 是否为数组类型
 export const isArray = toString.call(val) === '[object Array]'
 
-//
+// 正则类型
 export const isRegExp = toString.call(val) === '[object RegExp]'
+
+// 普通对象类型
+export const isPlainObject = toString.call(val) === '[object Object]'
+
+// 日期类型
+export const isDate = val => toString.call(val) === '[object Date]'
+
+// 非null的对象类型
+export const isObject = val => val !== null && typeof val === 'object'
 
 // 是否为布尔类型
 export const isBool = val => typeof val === 'boolean'
@@ -39,12 +48,6 @@ export const isNan = val => Object.is(val, NaN)
 
 // 浮点数
 export const isFloat = val => val.split('.').length >= 2
-
-// 对象类型
-export const isObj = val => Object(val) === val
-
-// 日期类型
-export const isDate = val => toString.call(val) === '[object Date]'
 
 // DOM节点
 export const isDomNode = object => isObj(object) && object.nodeType > 0
@@ -73,134 +76,95 @@ export const isLandscape = () => window.orientation === 90 || window.orientation
  * *  *  *  *  *  *  *
  ***********************/
 
-/**
- * 验证中文
- * @param {String} val
- */
-export const checkChinese = val => /[\u4e00-\u9fa5]/gm.test(val)
+// 仅中文
+export const isChinese = val => /[\u4e00-\u9fa5]/gm.test(val)
 
-/**
- * 验证中文，数字或字母
- * @param {String} val
- */
-export const checkChineseNumberLettter = data => /^[a-zA-Z0-9\u4e00-\u9fa5]+$/g.test(data)
+// 中文，数字或字母
+export const isChineseNumberLettter = data => /^[a-zA-Z0-9\u4e00-\u9fa5]+$/g.test(data)
 
-/**
- * 验证英文
- * @param {String} val
- */
-export const checkEnglish = val => /^[a-z]+$/i.test(val)
+// 英文
+export const isEnglish = val => /^[A-Za-z]+$/.test(val)
 
-/**
- * 验证大写
- * @param {String} val
- */
-export const checkCapitalLetter = val => /^[A-Z]+$/.test(val)
+// 仅小写英文
+export const isLowerLetter = val => /^[a-z]+$/.test(val)
 
-/**
- * 验证数字
- * @param {Number} val
- */
-export const checkNum = val => /^\d+$/.test(val)
+// 仅大写英文
+export const isCapitalLetter = val => /^[A-Z]+$/.test(val)
 
-/**
- * 验证小数
- * @param { string } value
- */
-export const checkDecimal = value => /^\d+\.\d+$/g.test(value)
+// 数字
+export const isNum = val => /^\d+$/.test(val)
 
-/**
- *  验证英文加数字
- * @param {String} val
- */
-export const checkAlphaNumeric = val => /^[A-Za-z0-9]+$/.test(val)
+// 整数
+export const isInteger = val => /^(-|\+)?\d+$/.test(val)
 
-/**
- *  验证合法邮编
- * @param {String} val
- */
-export const checkPostcode = val => /^[1-9]\d{5}(?!\d)$/.test(val)
+// 正整数
+export const isPositiveNum = val => /^[1-9]d*$/.test(val)
 
-/**
- *  验证ip4
- * @param {String} val
- */
-export const checkIp4 = val =>
+// 负整数
+export const isNegativeNum = val => /^-[1-9]d*$/.test(val)
+
+// 非负浮点数
+export const isNotNegativeFloatNum = val => /^\d+(\.\d+)?$/.test(val)
+
+// 小数
+export const isDecimal = value => /^\d+\.\d+$/g.test(value)
+
+// 英文加数字
+export const isAlphaNumeric = val => /^[A-Za-z0-9]+$/.test(val)
+
+// 邮编
+export const isPostcode = val => /^[1-9]\d{5}(?!\d)$/.test(val)
+
+// ip4
+export const isIp4 = val =>
   /^(?:(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.){3}(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/.test(
     val
   )
 
-/**
- *  验证ip6
- * @param {String} val
- */
-export const checkIp6 = val =>
+// ip6
+export const isIp6 = val =>
   /^((?=.*::)(?!.*::.+::)(::)?([\dA-F]{1,4}:(:|\b)|){5}|([\dA-F]{1,4}:){6})((([\dA-F]{1,4}((?!\3)::|:\b|$))|(?!\2\3)){2}|(((2[0-4]|1\d|[1-9])?\d|25[0-5])\.?\b){4})$/i.test(
     val
   )
 
-/**
- *  验证有效身份证
- * @param {Number} val
- */
-export const checkCard = val =>
+// 有效身份证
+export const isCard = val =>
   /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(
     val
   )
 
-/**
- * 验证中文名
- * @param { string } value
- */
-export const checkChineseName = value => /^(?:[\u4e00-\u9fa5·]{2,16})$/g.test(value)
+// 中文名
+export const isChineseName = value => /^(?:[\u4e00-\u9fa5·]{2,16})$/g.test(value)
 
-/**
- *  验证有效电话号码
- * @param {Number} val
- */
-export const checkTelephone = val =>
+// 电话号码
+export const isTelephone = val =>
   /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/.test(val)
 
-/**
- *  验证有效url
- * @param {String} val
- */
-export const checkUrl = val =>
+// 有效url
+export const isUrl = val =>
   /^(((ht|f)tps?):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?$/.test(val)
 
-/**
- *  验证有效日期
- * @param {String} val
- */
-export const checkYyMmDd = val => /^[1-2][0-9][0-9][0-9]-[0-1]{0,1}[0-9]-[0-3]{0,1}[0-9]$/.test(val)
+// 有效日期
+export const isYyMmDd = val => /^[1-2][0-9][0-9][0-9]-[0-1]{0,1}[0-9]-[0-3]{0,1}[0-9]$/.test(val)
 
-/**
- *  验证有效端口
- * @param {String} val
- */
-export const checkPort = val =>
+// 有效端口
+export const isPort = val =>
   /^([1-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/.test(
     val
   )
 
-/**
- *  验证外链
- * @param {String} val
- */
-export const checkExternal = path => /^(https?:|mailto:|tel:)/.test(path)
+// 外链
+export const isExternal = path => /^(https?:|mailto:|tel:)/.test(path)
 
-/**
- * 验证16进制颜色
- * @param { string } value
- */
-export const checkColor16 = value => /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/g.test(value)
+// 16进制颜色
+export const isColor16 = value => /^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$/g.test(value)
 
 /**
  * 检测浏览器内核
  * @param {String} val
- * @return 'trident', 'presto','webKit','gecko'
+ * @return 'trident', 'presto', 'webKit', 'gecko'
  */
-export const checkBrowser = () => {
+export const isBrowser = () => {
   const u = navigator.userAgent
   const obj = {
     trident: u.indexOf('Trident') > -1, //IE内核
@@ -216,7 +180,7 @@ export const checkBrowser = () => {
  * @param {any} val
  * @return {String } ’ios', 'android‘, 'iPad'
  */
-export const checkIosAndroidIpad = () => {
+export const isIosAndroidIpad = () => {
   const u = navigator.userAgent
   const obj = {
     ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
@@ -231,7 +195,7 @@ export const checkIosAndroidIpad = () => {
  * @param {any} val
  * @return {String} 'weixin','qq,'uc'
  */
-export const checkWeixinQqUc = () => {
+export const isWeixinQqUc = () => {
   const u = navigator.userAgent
   const obj = {
     weixin: u.indexOf('MicroMessenger') > -1, //是否微信

@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:20:39
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 20:25:14
+ * @Last Modified time: 2020-06-07 21:45:53
  *
  * 《storage的增删改查》
  */
@@ -15,7 +15,7 @@
  * @param val 设置指定value值
  * @example setStorage('key', { a1: '111', a2: 222 })-> key:{ a1: '111', a2: 222 }
  */
-export const setStorage = (key, val) => {
+export function setStorage(key, val) {
   typeof val === 'object' && (val = JSON.stringify(val))
   window.localStorage.setItem(key, val)
 }
@@ -25,7 +25,7 @@ export const setStorage = (key, val) => {
  * @return  {any}
  * @example getStorage('key')-> { a1: '111', a2: 222 }
  */
-export const getStorage = key => {
+export function getStorage(key) {
   let storageVal = localStorage.getItem(key)
   storageVal = storageVal === 'undefined' ? '' : JSON.parse(storageVal)
   return storageVal
@@ -38,7 +38,7 @@ export const getStorage = key => {
  * @example hasStorage('key')-> true
  * @example hasStorage('key',{ a1: '111', a2: 222 })-> key:{ a1: '111', a2: 222 }
  */
-export const hasStorage = (key, defaultVal) => {
+export function hasStorage(key, defaultVal) {
   if (!defaultVal) {
     return !Object.is(this.get(key), null)
   }
@@ -50,14 +50,14 @@ export const hasStorage = (key, defaultVal) => {
  * @param key 移除指定key值
  * @example removeStorage('key')
  */
-export const removeStorage = key => {
+export function removeStorage(key) {
   window.localStorage.removeItem(key)
 }
 /**
  * 清空所有Storage数据
  * @example clearStorage()
  */
-export const clearStorage = () => {
+export function clearStorage() {
   window.localStorage.clear()
 }
 
@@ -67,7 +67,7 @@ export const clearStorage = () => {
  * @param {*} value 存贮值
  * @param {String} expire 过期时间,毫秒数
  */
-export const setExpireStorage = (key, value, expire) => {
+export function setExpireStorage(key, value, expire) {
   if (typeof value === 'object') value = JSON.stringify(value)
   localStorage.setItem(key, value)
   setTimeout(() => {

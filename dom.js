@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 21:27:39
+ * @Last Modified time: 2020-06-07 21:52:25
  *
  * 《DOM相关的一些常用方法》
  */
@@ -11,7 +11,9 @@
  * 隐藏所有指定标签
  * 例: hide(document.querySelectorAll('img'))
  */
-export const hideTag = (...el) => [...el].forEach(e => (e.style.display = 'none'))
+export function hideTag(...el) {
+  ;[...el].forEach(e => (e.style.display = 'none'))
+}
 
 /**
  * 检查是否包含子元素
@@ -19,14 +21,18 @@ export const hideTag = (...el) => [...el].forEach(e => (e.style.display = 'none'
  * @param { element } child
  * 例：elementContains(document.querySelector('head'), document.querySelector('title')); // true
  */
-export const elementContains = (parent, child) => parent !== child && parent.contains(child)
+export function elementContains(parent, child) {
+  return parent !== child && parent.contains(child)
+}
 
 /**
  * 返回指定元素的生效样式
  * @param { element} el  元素节点
  * @param { string } ruleName  指定元素的名称
  */
-export const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName]
+export function getStyle(el, ruleName) {
+  return getComputedStyle(el)[ruleName]
+}
 
 /**
  * 检查元素是否具有指定的类
@@ -35,7 +41,9 @@ export const getStyle = (el, ruleName) => getComputedStyle(el)[ruleName]
  * @example hasClass(document.querySelector('p.special'), 'special') // true
  */
 
-export const hasClass = (el, className) => el.classList.contains(className)
+export function hasClass(el, className) {
+  return el.classList.contains(className)
+}
 
 /**
  * 获取所有图像
@@ -44,8 +52,7 @@ export const hasClass = (el, className) => el.classList.contains(className)
  * @example getImages(document, true); // ['image1.jpg', 'image2.png', 'image1.png', '...']
  * @example getImages(document, false); // ['image1.jpg', 'image2.png', '...']
  */
-
-export const getImages = (el, includeDuplicates = false) => {
+export function getImages(el, includeDuplicates = false) {
   const images = [...el.getElementsByTagName('img')].map(img => img.getAttribute('src'))
   return includeDuplicates ? images : [...new Set(images)]
 }
@@ -151,20 +158,22 @@ export function exitFullscreen() {
 }
 
 // 返回当前滚动条位置
-export const getScrollPosition = (el = window) => ({
-  x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
-  y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
-})
+export function getScrollPosition(el = window) {
+  return {
+    x: el.pageXOffset !== undefined ? el.pageXOffset : el.scrollLeft,
+    y: el.pageYOffset !== undefined ? el.pageYOffset : el.scrollTop
+  }
+}
 
 // 滚动到指定元素区域
-export const smoothScroll = element => {
+export function smoothScroll(element) {
   document.querySelector(element).scrollIntoView({
     behavior: 'smooth'
   })
 }
 
 // 平滑滚动到页面顶部
-export const scrollToTop = () => {
+export function scrollToTop() {
   const c = document.documentElement.scrollTop || document.body.scrollTop
   if (c > 0) {
     window.requestAnimationFrame(scrollToTop)
@@ -173,7 +182,7 @@ export const scrollToTop = () => {
 }
 
 // 检查页面底部是否可见
-export const bottomVisible = () => {
+export function bottomVisible() {
   return (
     document.documentElement.clientHeight + window.scrollY >=
     (document.documentElement.scrollHeight || document.documentElement.clientHeight)

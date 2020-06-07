@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-05-17 21:21:06
+ * @Last Modified time: 2020-06-07 21:35:36
  *
  * 《处理url相关的一些常用方法》
  */
@@ -46,6 +46,6 @@ export function removeUrlParam(name) {
 }
 
 // http跳转https
-export const httpsRedirect = () => {
+export function httpsRedirect() {
   if (location.protocol !== 'https:') location.replace('https://' + location.href.split('//')[1])
 }

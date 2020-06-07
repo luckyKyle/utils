@@ -7,7 +7,7 @@ import { isDate } from 'util'
  * @return Object
  * @example freezeObj(data)
  */
-export const freezeObj = obj => {
+export function freezeObj(obj) {
   Object.freeze(obj)
   Object.keys(obj).forEach(key => {
     typeof obj[key] === 'object' && freezeObj(obj[key])
@@ -19,7 +19,7 @@ export const freezeObj = obj => {
  * @param {Object} oneObj  对象
  * @param {Object} twoObj 对象
  */
-export const isEqual = (oneObj, twoObj) => {
+export function isEqual(oneObj, twoObj) {
   const aProps = Object.getOwnPropertyNames(oneObj)
   const bProps = Object.getOwnPropertyNames(twoObj)
 
@@ -46,9 +46,11 @@ export const isEqual = (oneObj, twoObj) => {
  * 对象有循环引用,会报错
  * @param {Object}  obj 克隆的对象
  */
-export const cloneDeep = obj => clone(obj)
+export function cloneDeep(obj) {
+  return clone(obj)
+}
 
-const isType = (obj, type) => {
+function isType(obj, type) {
   if (typeof obj !== 'object') return false
   let flag
   switch (type) {
@@ -72,7 +74,7 @@ const isType = (obj, type) => {
  * @param  {[type]} parent object 需要进行克隆的对象
  * @return {[type]}        深克隆后的对象
  */
-const clone = parent => {
+function clone(parent) {
   // 维护两个储存循环引用的数组
   const parents = []
   const children = []
