@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 21:35:36
+ * @Last Modified time: 2020-06-07 22:39:34
  *
  * 《处理url相关的一些常用方法》
  */
@@ -48,4 +48,26 @@ export function removeUrlParam(name) {
 // http跳转https
 export function httpsRedirect() {
   if (location.protocol !== 'https:') location.replace('https://' + location.href.split('//')[1])
+}
+
+// 向传递的URL发出GET请求
+export function httpGet(url, callback, err = console.error) {
+  const request = new XMLHttpRequest()
+  request.open('GET', url, true)
+  request.onload = () => callback(request.responseText)
+  request.onerror = () => err(request)
+  request.send()
+}
+
+export function httpPost(url, data, callback, err = console.error) {
+  if (Object.prototype.toString.call(data) === '[object Object]') {
+    data = JSON.stringify(data)
+  }
+
+  const request = new XMLHttpRequest()
+  request.open('POST', url, true)
+  request.setRequestHeader('Content-type', 'application/json; charset=utf-8')
+  request.onload = () => callback(request.responseText)
+  request.onerror = () => err(request)
+  request.send(data)
 }

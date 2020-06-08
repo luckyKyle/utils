@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 21:42:15
+ * @Last Modified time: 2020-06-07 22:30:56
  *
  * 《处理文件(上传下载)相关的一些常用方法》
  */
@@ -37,6 +37,26 @@ export function fileFormatSize(size) {
     size /= 1024
   }
   return (Math.round(size * 100) / 100 || 0) + unit[i]
+}
+
+// B转换到KB,MB,GB并保留两位小数
+export function formatFileSize(fileSize) {
+  let temp
+  if (fileSize < 1024) {
+    return fileSize + 'B'
+  } else if (fileSize < 1024 * 1024) {
+    temp = fileSize / 1024
+    temp = temp.toFixed(2)
+    return temp + 'KB'
+  } else if (fileSize < 1024 * 1024 * 1024) {
+    temp = fileSize / (1024 * 1024)
+    temp = temp.toFixed(2)
+    return temp + 'MB'
+  } else {
+    temp = fileSize / (1024 * 1024 * 1024)
+    temp = temp.toFixed(2)
+    return temp + 'GB'
+  }
 }
 
 /**

@@ -68,3 +68,22 @@ export function executeConsumeTime(fn) {
   const end = performance.now()
   return end - start
 }
+
+// 递归优化（尾递归）
+export function tco(f) {
+  let value
+  let active = false
+  let accumulated = []
+
+  return function accumulator() {
+    accumulated.push(arguments)
+    if (!active) {
+      active = true
+      while (accumulated.length) {
+        value = f.apply(this, accumulated.shift())
+      }
+      active = false
+      return value
+    }
+  }
+}

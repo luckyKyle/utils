@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 21:39:12
+ * @Last Modified time: 2020-06-07 22:17:01
  *
  * 《处理数组相关的一些常用方法》
  */
@@ -31,7 +31,8 @@ export function intersection(arr1, arr2) {
  * 数组差集,只支持一维数组
  * @param {Array} arr1
  * @param {Array} arr2
- * @example difference([1, 2, 3] [2, 4, 5]) -> [1,3,4,5]
+ * @example difference([1, 2, 3], [2, 3, 4]) -> [ 1, 4 ]
+ * @example difference( [2, 3, 4],[1, 2, 3]) -> [ 4, 1 ]
  */
 export function difference(arr1, arr2) {
   return arr1.concat(arr2).filter(v => !arr1.includes(v) || !arr2.includes(v))
@@ -120,12 +121,12 @@ export function getTimes(arr) {
  * 基本情况下，depth 等于 1 停止递归。 省略第二个参数，depth 只能平铺到 1 (单层平铺) 的深度。
  * @param {Array} arr  数组
  * @returns {Array}
- * @example flatten([1, [2], 3, 4])                      // [1, 2, 3, 4]
- * @example flatten([1, [2, [3, [4, 5], 6], 7], 8], 2)   // [1, 2, 3, [4, 5], 6, 7, 8]
+ * @example falttenDepth([1, [2], 3, 4])                      // [1, 2, 3, 4]
+ * @example falttenDepth([1, [2, [3, [4, 5], 6], 7], 8], 2)   // [1, 2, 3, [4, 5], 6, 7, 8]
  */
-export function flatten(arr, depth = 1) {
+export function falttenDepth(arr, depth = 1) {
   return depth != 1
-    ? arr.reduce((a, v) => a.concat(Array.isArray(v) ? flatten(v, depth - 1) : v), [])
+    ? arr.reduce((a, v) => a.concat(Array.isArray(v) ? falttenDepth(v, depth - 1) : v), [])
     : arr.reduce((a, v) => a.concat(v), [])
 }
 
@@ -136,16 +137,16 @@ export function flatten(arr, depth = 1) {
  * @example arrScrambling([1, 2, 3, 4])     //[ 2, 3, 4, 1 ]
  * @example arrScrambling([1, 2, 3, 4])     //[ 3, 1, 4, 2 ]
  */
-export function arrScrambling(array) {
-  let index = array.length
+export function arrScrambling(arr) {
+  let index = arr.length
   while (index) {
     index -= 1
     const randomIndex = Math.floor(Math.random() * index)
-    const middleware = array[index]
-    array[index] = array[randomIndex]
-    array[randomIndex] = middleware
+    const middleware = arr[index]
+    arr[index] = arr[randomIndex]
+    arr[randomIndex] = middleware
   }
-  return array
+  return arr
 }
 
 /**
@@ -164,4 +165,32 @@ export function chunk(arr, size) {
     },
     (v, i) => arr.slice(i * size, i * size + size)
   )
+}
+
+/**
+ * 返回数组中的每个第 n 个元素
+ *
+ * @export
+ * @param {Array} arr
+ * @param {Number} nth
+ * @returns
+ * @example everyNth([1, 3, 4, 3, 4, 3, 4, 3, 4],2)  //[ 1, 4, 4, 4, 4 ]
+ */
+export function everyNth(arr, nth) {
+  return arr.filter((e, i) => i % nth === 0)
+}
+
+/**
+ * 根据给定函数对数组元素进行分组
+ *
+ * @export
+ * @param {Array} arr
+ * @param {Function} func
+ * @returns {Array}
+ */
+export function groupBy(arr, func) {
+  return arr.map(typeof func === 'function' ? func : val => val[func]).reduce((acc, val, i) => {
+    acc[val] = (acc[val] || []).concat(arr[i])
+    return acc
+  }, {})
 }

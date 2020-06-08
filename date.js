@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 22:01:29
+ * @Last Modified time: 2020-06-07 22:44:41
  *
  * 《处理日期相关的一些常用方法》
  */
@@ -365,4 +365,83 @@ export function getMonthStartEnd(date = '2018-01-01') {
   firstDay = timestampToTime(firstDay)
   lastDay = timestampToTime(lastDay)
   return { firstDay, lastDay }
+}
+
+/**
+ * 格式化时间，转化为几分钟前，几秒钟前
+ * @param timestamp 时间戳，单位是毫秒
+ */
+export function timeFormat(timestamp) {
+  var mistiming = Math.round((Date.now() - timestamp) / 1000)
+  var arrr = ['年', '个月', '星期', '天', '小时', '分钟', '秒']
+  var arrn = [31536000, 2592000, 604800, 86400, 3600, 60, 1]
+  for (var i = 0; i < arrn.length; i++) {
+    var inm = Math.floor(mistiming / arrn[i])
+    if (inm != 0) {
+      return inm + arrr[i] + '前'
+    }
+  }
+}
+
+/**
+ * 获取n天之前的日期 getDaysBeforeDate(10) 10天前
+ *
+ * @param day 天数
+ */
+export function getDaysBeforeDate(day) {
+  var date = new Date(),
+    timestamp,
+    newDate
+  timestamp = date.getTime()
+  // 获取三天前的日期
+  newDate = new Date(timestamp - day * 24 * 3600 * 1000)
+  var year = newDate.getFullYear()
+  // 月+1是因为js中月份是按0开始的
+  var month = newDate.getMonth() + 1
+  var day = newDate.getDate()
+  if (day < 10) {
+    // 如果日小于10，前面拼接0
+    day = '0' + day
+  }
+  if (month < 10) {
+    // 如果月小于10，前面拼接0
+    month = '0' + month
+  }
+  return [year, month, day].join('/')
+}
+
+// 根据身份证获取出生年月
+export function getBirthdayFromIdCard(idCard) {
+  var birthday = ''
+  if (idCard != null && idCard != '') {
+    if (idCard.length == 15) {
+      birthday = '19' + idCard.substr(6, 6)
+    } else if (idCard.length == 18) {
+      birthday = idCard.substr(6, 8)
+    }
+
+    birthday = birthday.replace(/(.{4})(.{2})/, '$1-$2-')
+  }
+
+  return birthday
+}
+
+/**
+ * 根据身份证获取年龄
+ * @param {String} UUserCard
+ */
+export function getAgeFromCard(UUserCard) {
+  UUserCard = UUserCard + ''
+  //获取年龄
+  var myDate = new Date()
+  var month = myDate.getMonth() + 1
+  var day = myDate.getDate()
+  var age = myDate.getFullYear() - UUserCard.substring(6, 10) - 1
+  if (
+    UUserCard.substring(10, 12) < month ||
+    (UUserCard.substring(10, 12) == month && UUserCard.substring(12, 14) <= day)
+  ) {
+    age++
+  }
+  return age
 }

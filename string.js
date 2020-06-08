@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 21:48:39
+ * @Last Modified time: 2020-06-07 22:35:53
  *
  * 《字符串相关的一些常用方法》
  */
@@ -56,4 +56,51 @@ export function toCapitalLetter(str) {
 export function randomHexColorCode() {
   const n = (Math.random() * 0xfffff * 1000000).toString(16)
   return '#' + n.slice(0, 6)
+}
+
+// 截取字符串并加身略号
+export function subText(str, length) {
+  if (str.length === 0) {
+    return ''
+  }
+  if (str.length > length) {
+    return str.substr(0, length) + '...'
+  } else {
+    return str
+  }
+}
+
+/**
+ * 大小写转换
+ *
+ * @param { string } str 待转换的字符串
+ * @param { number } type 1-全大写 2-全小写 3-首字母大写 其他-不转换
+ */
+
+export function turnCase(str, type) {
+  switch (type) {
+    case 1:
+      return str.toUpperCase()
+    case 2:
+      return str.toLowerCase()
+    case 3:
+      return str[0].toUpperCase() + str.substr(1).toLowerCase()
+    default:
+      return str
+  }
+}
+
+// 转义html(防XSS攻击)
+export const escapeHTML = str => {
+  str.replace(
+    /[&<>'"]/g,
+    tag =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[tag] || tag)
+  )
 }
