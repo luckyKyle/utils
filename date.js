@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-17 21:16:28
+ * @Last Modified time: 2020-06-17 21:25:50
  *
  * 《处理日期相关的一些常用方法》
  */
@@ -82,6 +82,34 @@ export function timestampToTime(timestamp, needTime = false, format = 1) {
     case 3:
       return needTime ? `${Y}年${M}月${D}日 ${h}:${m}:${s}` : `${Y}年${M}月${D}`
   }
+}
+/**
+ *  将时间戳转换为日期
+ * "使用Date(), 将时间戳转换转换为可读格式)."
+ * @param {传入的时间戳} timestamp
+ * @param {返回的格式 ('YYYY-MM-DD')} format
+ * Example1: timestampToTime(1489525200000, 'YYYY-MM-DD hh:mm:ss') -> "2017-03-15 05:00:00"
+ * Example2: timestampToTime(1489525200000, 'YYYY-MM-DD') -> "2017-03-15"
+ * Example3: timestampToTime(1489525200000, 'YYYY/MM/DD hh:mm:ss') -> "2017/03/15 05:00:00"
+ * Example4: timestampToTime(1489525200000, 'YYYY/MM/DD') -> "2017/03/15"
+ */
+export function timestampToTime2(timestamp, format = 'YYYY-MM-DD') {
+  const date = new Date(timestamp)
+  const obj = {
+    YYYY: date.getFullYear(),
+    M: date.getMonth() + 1,
+    D: date.getDate(),
+    h: date.getHours(),
+    m: date.getMinutes(),
+    s: date.getSeconds(),
+    MM: padTime(date.getMonth() + 1),
+    DD: padTime(date.getDate()),
+    hh: padTime(date.getHours()),
+    mm: padTime(date.getMinutes()),
+    ss: padTime(date.getSeconds())
+  }
+
+  return format.replace(/(YYYY|MM?|DD?|hh?|mm?|ss?)/g, f => obj[f])
 }
 
 /**
