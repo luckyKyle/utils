@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 22:35:53
+ * @Last Modified time: 2020-06-17 21:12:04
  *
  * 《字符串相关的一些常用方法》
  */
@@ -103,4 +103,33 @@ export const escapeHTML = str => {
         '"': '&quot;'
       }[tag] || tag)
   )
+}
+
+/**
+ * 字符串长度截取
+ * @export
+ * @param {String} str 需要截取的字符串
+ * @param {Number} len 指定长度
+ * @returns {String}
+ * @example cutString('这是一个十个字的长度',3)  // ‘这是一...’
+ */
+export function cutString(str, len) {
+  let temp
+  let icount = 0
+  let patrn = /[^\x00-\xff]/
+  let strre = ''
+  for (const i = 0; i < str.length; i++) {
+    if (icount < len - 1) {
+      temp = str.substr(i, 1)
+      if (patrn.exec(temp) == null) {
+        icount = icount + 1
+      } else {
+        icount = icount + 2
+      }
+      strre += temp
+    } else {
+      break
+    }
+  }
+  return strre + '...'
 }

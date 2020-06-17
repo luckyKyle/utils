@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 22:17:01
+ * @Last Modified time: 2020-06-17 20:56:40
  *
  * 《处理数组相关的一些常用方法》
  */
@@ -193,4 +193,45 @@ export function groupBy(arr, func) {
     acc[val] = (acc[val] || []).concat(arr[i])
     return acc
   }, {})
+}
+
+/**
+ * 穷举SKU，将若干个不同的属性穷举出来
+ *
+ * @export
+ * @param {chunks[]}
+ * @returns {Array}
+ * @example combine(['iPhone11', 'iPhone11 Pro'], ['yellow', 'blue'],['64G', '128G'])  // [
+    [ 'iPhone11', 'yellow', '64G' ],
+    [ 'iPhone11', 'yellow', '128G' ],
+    [ 'iPhone11', 'blue', '64G' ],
+    [ 'iPhone11', 'blue', '128G' ],
+    [ 'iPhone11 Pro', 'yellow', '64G' ],
+    [ 'iPhone11 Pro', 'yellow', '128G' ],
+    [ 'iPhone11 Pro', 'blue', '64G' ],
+    [ 'iPhone11 Pro', 'blue', '128G' ]
+  ]
+ */
+export function combine(...chunks) {
+  const result = []
+
+  function helper(chunkIndex, prev) {
+    const chunk = chunks[chunkIndex]
+    const isLast = chunkIndex === chunks.length - 1
+    for (let val of chunk) {
+      const cur = prev.concat(val)
+      if (isLast) {
+        // 如果已经处理到数组的最后一项了 则把拼接的结果放入返回值中
+        result.push(cur)
+      } else {
+        helper(chunkIndex + 1, cur)
+      }
+    }
+  }
+
+  // 从属性数组下标为 0 开始处理
+  // 并且此时的 prev 是个空数组
+  helper(0, [])
+
+  return result
 }
