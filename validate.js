@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 19:41:24
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 23:03:02
+ * @Last Modified time: 2020-07-27 21:07:35
  *
  * 《处理参数类型相关的一些常用方法》
  */
@@ -14,13 +14,13 @@
 const toString = Object.prototype.toString
 
 // 是否为数组类型
-export const isArray = toString.call(val) === '[object Array]'
+export const isArray = val => toString.call(val) === '[object Array]'
 
 // 正则类型
-export const isRegExp = toString.call(val) === '[object RegExp]'
+export const isRegExp = val => toString.call(val) === '[object RegExp]'
 
 // 普通对象类型
-export const isPlainObject = toString.call(val) === '[object Object]'
+export const isPlainObject = val => toString.call(val) === '[object Object]'
 
 // 日期类型
 export const isDate = val => toString.call(val) === '[object Date]'
@@ -50,7 +50,7 @@ export const isNan = val => Object.is(val, NaN)
 export const isFloat = val => val.split('.').length >= 2
 
 // DOM节点
-export const isDomNode = object => isObj(object) && object.nodeType > 0
+export const isDomNode = object => isObject(object) && object.nodeType > 0
 
 // falsy值
 export const isFalsy = val => !val
