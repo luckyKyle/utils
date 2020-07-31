@@ -8,6 +8,21 @@
  */
 
 /**
+ * 类数组转换成数组格式
+ * @param {Array} list
+ * @param {Number} start
+ * @example  toArray(arguments, 1)
+ */
+export function toArray(list, start = 0) {
+  let i = list.length - start
+  let ret = new Array(i)
+  while (i--) {
+    ret[i] = list[i + start]
+  }
+  return ret
+}
+
+/**
  * 数组并集,只支持一维数组
  * @param {Array} arr1
  * @param {Array} arr2

@@ -1,5 +1,4 @@
-import { isArray, isRegExp, isDate } from './validate'
-import { isDate } from 'util'
+import { isArray, isRegExp, isDate, isObject } from './validate'
 
 /**
  * 彻底冻结对象
@@ -15,27 +14,49 @@ export function freezeObj(obj) {
 }
 
 /**
- * 判断两个对象是否相等,目前只支持对象值为简单数据类型的判断
- * @param {Object} oneObj  对象
- * @param {Object} twoObj 对象
+ * 宽松对比两个对象是否相等
+ * from vue@2.6.11 line 266
+ * if they are plain objects, do they have the same shape?
  */
-export function isEqual(oneObj, twoObj) {
-  const aProps = Object.getOwnPropertyNames(oneObj)
-  const bProps = Object.getOwnPropertyNames(twoObj)
-
-  if (aProps.length != bProps.length) {
-    return false
+export function looseEqual(a, b) {
+  if (a === b) {
+    return true
   }
-
-  for (let i = 0; i < aProps.length; i++) {
-    let propName = aProps[i]
-    let propA = oneObj[propName]
-    let propB = twoObj[propName]
-    if (propA !== propB) {
+  const isObjectA = isObject(a)
+  const isObjectB = isObject(b)
+  if (isObjectA && isObjectB) {
+    try {
+      const isArrayA = Array.isArray(a)
+      const isArrayB = Array.isArray(b)
+      if (isArrayA && isArrayB) {
+        return (
+          a.length === b.length &&
+          a.every(function (e, i) {
+            return looseEqual(e, b[i])
+          })
+        )
+      } else if (a instanceof Date && b instanceof Date) {
+        return a.getTime() === b.getTime()
+      } else if (!isArrayA && !isArrayB) {
+        const keysA = Object.keys(a)
+        const keysB = Object.keys(b)
+        return (
+          keysA.length === keysB.length &&
+          keysA.every(key => {
+            return looseEqual(a[key], b[key])
+          })
+        )
+      } else {
+        return false
+      }
+    } catch (e) {
       return false
     }
+  } else if (!isObjectA && !isObjectB) {
+    return String(a) === String(b)
+  } else {
+    return false
   }
-  return true
 }
 
 /**

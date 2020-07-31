@@ -34,6 +34,10 @@ export const isBool = val => typeof val === 'boolean'
 // 是否为函数类型
 export const isFunction = val => val && typeof val === 'function'
 
+// 是否是Promise对象
+export const isPromise = val =>
+  isDef(val) && typeof val.then === 'function' && val.catch === 'function'
+
 // 是否为数字类型
 export const isNumber = val => typeof val === 'number'
 
@@ -264,20 +268,35 @@ export const isWebAccount = value => /^[a-zA-Z]\w{4,15}$/g.test(value)
 export const isQQNum = value => /^[1-9][0-9]{4,10}$/g.test(value)
 
 /**
- * 检测浏览器内核
+ * 浏览器环境嗅探
+ * Browser environment sniffing
+ * from vue@2.6.11 line 474
  * @param {String} val
- * @return 'trident', 'presto', 'webKit', 'gecko'
+ * @return {Boolean}
  */
-export const isBrowser = () => {
-  const u = navigator.userAgent
-  const obj = {
-    trident: u.indexOf('Trident') > -1, //IE内核
-    presto: u.indexOf('Presto') > -1, //opera内核
-    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1 //火狐内核
-  }
-  return Object.keys(obj)[Object.values(obj).indexOf(true)]
-}
+export const inBrowser = () => typeof window !== 'undefined'
+
+export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
+
+export const inWeexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
+
+export const UA = inBrowser && window.navigator.userAgent.toLowerCase()
+
+export const isIE = UA && /msie|trident/.test(UA)
+
+export const isIE9 = UA && UA.indexOf('msie 9.0') > 0
+
+export const isEdge = UA && UA.indexOf('edge/') > 0
+
+export const isIOS = (UA && /iphone|ipad|ipod|ios/.test(UA)) || weexPlatform === 'ios'
+
+export const isAndroid = (UA && UA.indexOf('android') > 0) || weexPlatform === 'android'
+
+export const isChrome = UA && /chrome\/\d+/.test(UA) && !isEdge
+
+export const isPhantomJS = UA && /phantomjs/.test(UA)
+
+export const isFF = UA && UA.match(/firefox\/(\d+)/)
 
 /**
  * 检测移动终端类型

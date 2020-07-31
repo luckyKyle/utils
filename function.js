@@ -28,7 +28,6 @@ export function copyToClipboard(str = '') {
  * @returns
  * @example obj = canAbortPromise(promise)   obj.abort("abort this promise")
  */
-
 export function canAbortPromise(promise) {
   let res = null
   let abort = null
