@@ -1,16 +1,16 @@
 import { isArray, isRegExp, isDate, isObject } from './validate'
 
 /**
- * 彻底冻结对象
+ * 深度冻结对象
  * @param obj 需要冻结的对象
  * @return Object
  * @example freezeObj(data)
  */
-export function freezeObj(obj) {
-  Object.freeze(obj)
-  Object.keys(obj).forEach(key => {
-    typeof obj[key] === 'object' && freezeObj(obj[key])
+export function deepFreeze(obj) {
+  Object.keys(obj).forEach(prop => {
+    if (typeof obj[prop] === 'object' && !Object.isFrozen(obj[prop])) deepFreeze(obj[prop])
   })
+  return Object.freeze(obj)
 }
 
 /**
@@ -57,18 +57,6 @@ export function looseEqual(a, b) {
   } else {
     return false
   }
-}
-
-/**
- * 对象深度克隆,
- * JSON.stringify深度克隆对象
- * 无法对函数 、RegExp等特殊对象的克隆,
- * 会抛弃对象的constructor,所有的构造函数会指向Object
- * 对象有循环引用,会报错
- * @param {Object}  obj 克隆的对象
- */
-export function cloneDeep(obj) {
-  return clone(obj)
 }
 
 function isType(obj, type) {
@@ -141,4 +129,58 @@ function clone(parent) {
     return child
   }
   return _clone(parent)
+}
+
+/**
+ * 对象深度克隆,
+ * JSON.stringify深度克隆对象, 无法对函数 、RegExp等特殊对象的克隆,
+ * 会抛弃对象的constructor,所有的构造函数会指向Object
+ * 对象有循环引用,会报错
+ * @param {Object}  obj 克隆的对象
+ */
+export function cloneDeep(obj) {
+  return clone(obj)
+}
+
+export function deepClone(obj) {
+  if (obj === null) return null
+  const clone = Object.assign({}, obj)
+  Object.keys(clone).forEach(
+    key => (clone[key] = typeof obj[key] === 'object' ? deepClone(obj[key]) : obj[key])
+  )
+  return Array.isArray(obj) && obj.length
+    ? (clone.length = obj.length) && Array.from(clone)
+    : Array.isArray(obj)
+    ? Array.from(obj)
+    : clone
+}
+
+/**
+ * 查看一个对象是否有指定的key值
+ * @export
+ * @param {Object} obj
+ * @param {Array} keys
+ * @returns {Boolean}
+ * @example const obj = {
+              a: 1,
+              b: { c: 4 },
+              'b.d': 5
+            }
+            hasKey(obj, ['a']); // true
+            hasKey(obj, ['b']); // true
+            hasKey(obj, ['b', 'c']); // true
+            hasKey(obj, ['b.d']); // true
+            hasKey(obj, ['d']); // false
+            hasKey(obj, ['c']); // false
+            hasKey(obj, ['b', 'f']); // false
+ */
+export function hasKey(obj, keys) {
+  return (
+    keys.length > 0 &&
+    keys.every(key => {
+      if (typeof obj !== 'object' || !obj.hasOwnProperty(key)) return false
+      obj = obj[key]
+      return true
+    })
+  )
 }

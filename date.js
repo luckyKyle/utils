@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-17 21:25:50
+ * @Last Modified time: 2020-09-03 22:17:45
  *
  * 《处理日期相关的一些常用方法》
  */
@@ -23,6 +23,14 @@ export function padTime(num) {
  */
 export function timeTotimestamp(date) {
   return Date.parse(date)
+}
+
+/**
+ *  日期转换时间戳
+ *  @example dayOfYear(new Date()); // 272
+ */
+export function getDayOfYear(date) {
+  Math.floor((date - new Date(date.getFullYear(), 0, 0)) / ONE_DAY)
 }
 
 /**

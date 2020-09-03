@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-17 21:12:04
+ * @Last Modified time: 2020-09-03 22:14:06
  *
  * 《字符串相关的一些常用方法》
  */
@@ -132,4 +132,18 @@ export function cutString(str, len) {
     }
   }
   return strre + '...'
+}
+
+/**
+ * 单词截取
+ * @export
+ * @param {String} str 需要截取的字符串
+ * @param {Number} len 指定长度
+ * @returns {String}
+ * @example words('I love javaScript!!'); // ["I", "love", "javaScript"]
+ * @example words('python, javaScript & coffee'); // ["python", "javaScript", "coffee"]
+ */
+
+export function words(str, pattern = /[^a-zA-Z-]+/) {
+  return str.split(pattern).filter(Boolean)
 }
