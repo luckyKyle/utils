@@ -1,9 +1,5 @@
 
 (function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
-'use strict';
-
-Object.defineProperty(exports, '__esModule', { value: true });
-
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -6793,7 +6789,7 @@ var number = /*#__PURE__*/Object.freeze({
  * @Author: KyleWang
  * @Date: 2020-05-17 19:41:24
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-07-27 21:07:35
+ * @Last Modified time: 2020-09-20 23:17:55
  *
  * 《处理参数类型相关的一些常用方法》
  */
@@ -7100,6 +7096,7 @@ var inBrowser = function inBrowser() {
   return typeof window !== 'undefined';
 };
 var inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform;
+var weexPlatform = inWeex && WXEnvironment.platform.toLowerCase();
 var inWeexPlatform = inWeex && WXEnvironment.platform.toLowerCase();
 var UA = inBrowser && window.navigator.userAgent.toLowerCase();
 var isIE = UA && /msie|trident/.test(UA);
@@ -7254,6 +7251,7 @@ var validate = /*#__PURE__*/Object.freeze({
   isQQNum: isQQNum,
   inBrowser: inBrowser,
   inWeex: inWeex,
+  weexPlatform: weexPlatform,
   inWeexPlatform: inWeexPlatform,
   UA: UA,
   isIE: isIE,
@@ -7388,7 +7386,7 @@ function deepClone(obj) {
     copy: copy
   });
   Object.keys(obj).forEach(function (key) {
-    copy[key] = deepCopy(obj[key], cache);
+    copy[key] = deepClone(obj[key], cache);
   });
   return copy;
 }
@@ -7845,18 +7843,4 @@ var window$1 = /*#__PURE__*/Object.freeze({
   addFavorite: addFavorite
 });
 
-exports.array = array;
-exports.cookie = cookie;
-exports.date = date;
-exports.dom = dom;
-exports.file = file;
-exports.foo = _function;
-exports.http = http;
-exports.number = number;
-exports.object = object;
-exports.session = session;
-exports.storage = storage;
-exports.string = string;
-exports.tree = tree;
-exports.validate = validate;
-exports.win = window$1;
+export { array, cookie, date, dom, file, _function as foo, http, number, object, session, storage, string, tree, validate, window$1 as win };

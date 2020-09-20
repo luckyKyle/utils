@@ -138,7 +138,7 @@ export function deepClone(obj, cache = []) {
   })
 
   Object.keys(obj).forEach(key => {
-    copy[key] = deepCopy(obj[key], cache)
+    copy[key] = deepClone(obj[key], cache)
   })
 
   return copy

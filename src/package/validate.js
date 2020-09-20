@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 19:41:24
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-07-27 21:07:35
+ * @Last Modified time: 2020-09-20 23:17:55
  *
  * 《处理参数类型相关的一些常用方法》
  */
@@ -277,6 +277,8 @@ export const isQQNum = value => /^[1-9][0-9]{4,10}$/g.test(value)
 export const inBrowser = () => typeof window !== 'undefined'
 
 export const inWeex = typeof WXEnvironment !== 'undefined' && !!WXEnvironment.platform
+
+export const weexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
 
 export const inWeexPlatform = inWeex && WXEnvironment.platform.toLowerCase()
 

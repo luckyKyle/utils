@@ -7,7 +7,7 @@ import livereload from 'rollup-plugin-livereload'
 
 export default {
   input: './src/index.js',
-  output: { file: 'dist/bundle.cjs.js', format: 'cjs', name: 'bundleName' },
+  output: { file: 'dist/utils.dev.js', format: 'iife', name: 'utils' },
   plugins: [
     typescript(),
     resolve(),
