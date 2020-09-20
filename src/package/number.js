@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-07 22:37:24
+ * @Last Modified time: 2020-09-20 22:19:30
  *
  * 《处理数字类型相关的一些常用方法》
  */
@@ -10,7 +10,6 @@
 // 引入包 decimal.js
 // 注意：包文件带.js后缀，webpack打包处理要小心，不要直接对所有.js后缀进行自动添加后缀等
 import { Decimal } from 'decimal.js'
-
 
 // 生成指定范围随机数
 /**
@@ -57,15 +56,12 @@ export const outOfNum = (val, maxNum) => {
   }
 }
 
-
-
 /**
  * num.js 进行数据计算
  * 1. 处理 0.1 + 0.2 !== 0.3 等精度问题
  * 2. 进行多位数精度计算
  * 3. 进行数据格式化
  */
-
 
 /**
  * @method getCelNum 获取decimal数据
@@ -108,9 +104,7 @@ export function plus(a, b) {
  * @todo 此处精度计算尽量在6位以内，超6位请慎用。
  */
 export function minus(a, b) {
-  return getCelNum(a)
-    .minus(getCelNum(b))
-    .toNumber()
+  return getCelNum(a).minus(getCelNum(b)).toNumber()
 }
 
 /**
@@ -223,34 +217,6 @@ export function formatNum(number, decimals = 2, roundType = '') {
   }
 
   return n.valueOf()
-}
-
-/**
- * @method formatMoney 格式化金额 （对小数位前进行千分位划分）
- *
- * @param number String | Number
- * @param decimals String | Number
- * @param roundType String (defult '' 四折五入 | ceil 向上取整，进一法 | floor 向下取整，退一法）
- *
- * @returns String
- *
- * @example formatMoney('1234567.12345') = '1,234,567.12'
- *
- * @todo 此处精度计算尽量在6位以内，超6位请慎用。
- * @todo 若需要对小数点后进行千分位划分，请自行扩展，此处主要针对常用两位小数计量。
- */
-export function formatMoney(number, decimals = 2, roundType = '') {
-  const num = `${number}`.replace(/[^0-9+-Ee.]|,/g, '')
-
-  const n = formatNum(num, decimals, roundType)
-
-  const s = n.split('.')
-  const re = /(-?\d+)(\d{3})/
-  while (re.test(s[0])) {
-    s[0] = s[0].replace(re, '$1' + ',' + '$2') // eslint-disable-line
-  }
-
-  return s.join('.')
 }
 
 /**

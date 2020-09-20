@@ -2,7 +2,7 @@
  * @Author: KyleWang
  * @Date: 2020-05-17 20:19:12
  * @Last Modified by: KyleWang
- * @Last Modified time: 2020-06-17 20:56:40
+ * @Last Modified time: 2020-09-20 21:39:39
  *
  * 《处理数组相关的一些常用方法》
  */
@@ -249,4 +249,8 @@ export function combine(...chunks) {
   helper(0, [])
 
   return result
+}
+
+export function find(list, f) {
+  return list.filter(f)[0]
 }
