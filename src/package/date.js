@@ -64,45 +64,19 @@ export function getDaysDiffBetweenDates(dateInitial, dateFinal) {
 }
 
 /**
- *  时间戳转换为日期
- * "使用Date(), 将时间戳转换转换为可读格式)."
- * @param {传入的时间戳} timestamp
- * @param {布尔值是否需要时钟} needTime
- * @param {返回的格式 (1:yyyy-mm-dd或者2: dd/mm/yyyy )} format
- * @example timestampToTime(1489525200000, true) -> "2017-03-15 05:00:00"
- * @example timestampToTime(1489525200000, false) -> "2017-03-15"
- * @example timestampToTime(1489525200000, true,2) -> "2017/03/15 05:00:00"
- * @example timestampToTime(1489525200000, false,2) -> "2017/03/15"
- */
-export function timestampToTime(timestamp, needTime = false, format = 1) {
-  let date = new Date(timestamp)
-  let Y = date.getFullYear()
-  let M = padTime(date.getMonth() + 1)
-  let D = padTime(date.getDate())
-  let h = padTime(date.getHours())
-  let m = padTime(date.getMinutes())
-  let s = padTime(date.getSeconds())
-  switch (format) {
-    case 1:
-      return needTime ? `${Y}-${M}-${D} ${h}:${m}:${s}` : `${Y}-${M}-${D}`
-    case 2:
-      return needTime ? `${D}/${M}/${Y} ${h}:${m}:${s}` : `${D}/${M}/${Y}`
-    case 3:
-      return needTime ? `${Y}年${M}月${D}日 ${h}:${m}:${s}` : `${Y}年${M}月${D}`
-  }
-}
-/**
  *  将时间戳转换为日期
  * "使用Date(), 将时间戳转换转换为可读格式)."
  * @param {传入的时间戳} timestamp
  * @param {返回的格式 ('YYYY-MM-DD')} format
- * Example1: timestampToTime(1489525200000, 'YYYY-MM-DD hh:mm:ss') -> "2017-03-15 05:00:00"
- * Example2: timestampToTime(1489525200000, 'YYYY-MM-DD') -> "2017-03-15"
- * Example3: timestampToTime(1489525200000, 'YYYY/MM/DD hh:mm:ss') -> "2017/03/15 05:00:00"
- * Example4: timestampToTime(1489525200000, 'YYYY/MM/DD') -> "2017/03/15"
+ * @example timestampToTime(1489525200000, 'YYYY-MM-DD hh:mm:ss') -> "2017-03-15 05:00:00"
+ * @example timestampToTime(1489525200000, 'YYYY-MM-DD') -> "2017-03-15"
+ * @example timestampToTime(1489525200000, 'YYYY/MM/DD hh:mm:ss') -> "2017/03/15 05:00:00"
+ * @example timestampToTime(1489525200000, 'YYYY/MM/DD') -> "2017/03/15"
+ *
  */
-export function timestampToTime2(timestamp, format = 'YYYY-MM-DD') {
-  const date = new Date(timestamp)
+export const timestampToTime = (timestamp, format = 'YYYY-MM-DD') => {
+  const temp = Number(timestamp) || timestamp
+  const date = new Date(temp)
   const obj = {
     YYYY: date.getFullYear(),
     M: date.getMonth() + 1,
@@ -298,17 +272,16 @@ export function getPreMontAllDate(number = 0, date) {
   return result
 }
 
-/***
+/**
  *  返回本周第一天的时间
  *  @return {String} WeekFirstDay
  */
 export function getWeekFirstDay() {
   const now = new Date()
-  const WeekFirstDay = new Date(now - (now.getDay() - 1) * ONE_DAY)
-  return WeekFirstDay
+  return new Date(now - (now.getDay() - 1) * ONE_DAY)
 }
 
-/***
+/**
  *  返回本周最后一天的时间
  *  @return {String} WeekLastDay
  */
@@ -319,7 +292,7 @@ export function getWeekLastDay() {
   return WeekLastDay
 }
 
-/***
+/**
  *  返回本月第一天的时间
  *  @return {String} MonthFirstDay
  */
@@ -328,7 +301,7 @@ export function getMonthFirstDay() {
   return new Date(now.getFullYear(), now.getMonth())
 }
 
-/***
+/**
  *  返回本月最后一天的时间
  *  @return {String} MonthLastDay
  */
