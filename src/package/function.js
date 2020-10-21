@@ -22,7 +22,7 @@ export function copyToClipboard(str = '') {
 }
 
 /**
- * 为promise对象新增个可拦截的方法
+ * 为promise对象增加可拦截的方法
  * @export
  * @param {*} promise 传递回来的promise对象
  * @returns
@@ -84,5 +84,28 @@ export function tco(f) {
       active = false
       return value
     }
+  }
+}
+
+/**
+ * 优先捕获async函数的错误, 使用时需要结构
+ * @export
+ * @param {Funcion} fn
+ * @returns {Array}
+ * @example async queryList(params){
+ *           const [error, res] = await errorCaptured(api(params))
+ *           if(error){
+ *             throw Error(error)  // 错误捕获
+ *           }
+ *           ....
+ *          }
+ */
+
+export async function errorCaptured(asyncFunc) {
+  try {
+    const result = await asyncFunc
+    return [null, result]
+  } catch (error) {
+    return [error, null]
   }
 }
