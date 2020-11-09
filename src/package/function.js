@@ -28,7 +28,7 @@ export function copyToClipboard(str = '') {
  * @returns
  * @example obj = canAbortPromise(promise)   obj.abort("abort this promise")
  */
-export function canAbortPromise(promise) {
+export function abortPromise(promise) {
   let res = null
   let abort = null
 
@@ -43,7 +43,7 @@ export function canAbortPromise(promise) {
   return p1
 }
 
-export function canAbortPromise2(promise) {
+export function abortPromise2(promise) {
   const obj = {}
   const p1 = new Promise((resolve, reject) => {
     obj.resolve = resolve
@@ -95,7 +95,7 @@ export function tco(f) {
  * @example async queryList(params){
  *           const [error, res] = await errorCaptured(api(params))
  *           if(error){
- *             throw Error(error)  // 错误捕获
+ *             return Promise(error)  // 错误捕获
  *           }
  *           ....
  *          }
@@ -107,5 +107,14 @@ export async function errorCaptured(asyncFunc) {
     return [null, result]
   } catch (error) {
     return [error, null]
+  }
+}
+
+
+export function memorize(fn) {
+  const cache = new Map()
+  return function (...args) {
+    const _args = JSON.stringify(args)
+    return cache.get(_args) || cache.set(_args, fn.apply(fn, args))
   }
 }

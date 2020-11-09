@@ -59,7 +59,7 @@ export function randomHexColorCode() {
 }
 
 // 截取字符串并加身略号
-export function subText(str, length) {
+export function subText(str, length = 5) {
   if (str.length === 0) {
     return ''
   }

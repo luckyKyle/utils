@@ -10,6 +10,61 @@
   </body>
   <script src="./dist/utils.dev.js"></script>
   <script>
-    console.log(window)
+    const {
+      func: { compose },
+      string: { toCapitalLetter, subText }
+    } = window.utils
+
+    function curry(func) {
+      return function curried(...args) {
+        if (args.length >= func.length) {
+          // 通过函数的length属性，来获取函数的形参个数
+          return func.apply(this, args)
+        } else {
+          return function (...args2) {
+            return curried.apply(this, args.concat(args2))
+          }
+        }
+      }
+    }
+
+
+    function memorize(fn) {
+      const cache = new Map()
+      return function (...args) {
+        const _args = JSON.stringify(args)
+        return cache.get(_args) || cache.set(_args, fn.apply(fn, args))
+      }
+    }
+
+    function complexCalc(a, b) {
+      return (a * b * b) / a + b * a - a * a + b * b * a
+    }
+
+    const curried = curry(complexCalc)
+
+    // const memoCalc = memorize(curried)
+
+    const memoCalc = memorize(complexCalc)
+
+    console.time('start1=>')
+    memoCalc(662622, 822838)
+    console.timeEnd('start1=>')
+
+    console.time('start2=>')
+    memoCalc(662622, 822838)
+    console.timeEnd('start2=>')
+
+    console.time('start3=>')
+    memoCalc(662622, 822838)
+    console.timeEnd('start3=>')
+
+    console.time('start4=>')
+    memoCalc(662622, 822838)
+    console.timeEnd('start4=>')
+
+    console.time('start5=>')
+    memoCalc(662622, 822838)
+    console.timeEnd('start5=>')
   </script>
 </html>

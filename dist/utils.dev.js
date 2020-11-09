@@ -19,6 +19,42 @@ var utils = (function (exports) {
     return _typeof(obj);
   }
 
+  function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+    try {
+      var info = gen[key](arg);
+      var value = info.value;
+    } catch (error) {
+      reject(error);
+      return;
+    }
+
+    if (info.done) {
+      resolve(value);
+    } else {
+      Promise.resolve(value).then(_next, _throw);
+    }
+  }
+
+  function _asyncToGenerator(fn) {
+    return function () {
+      var self = this,
+          args = arguments;
+      return new Promise(function (resolve, reject) {
+        var gen = fn.apply(self, args);
+
+        function _next(value) {
+          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+        }
+
+        function _throw(err) {
+          asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+        }
+
+        _next(undefined);
+      });
+    };
+  }
+
   function _defineProperty(obj, key, value) {
     if (key in obj) {
       Object.defineProperty(obj, key, {
@@ -609,53 +645,21 @@ var utils = (function (exports) {
     return (new Date(dateFinal) - new Date(dateInitial)) / ONE_DAY;
   }
   /**
-   *  时间戳转换为日期
-   * "使用Date(), 将时间戳转换转换为可读格式)."
-   * @param {传入的时间戳} timestamp
-   * @param {布尔值是否需要时钟} needTime
-   * @param {返回的格式 (1:yyyy-mm-dd或者2: dd/mm/yyyy )} format
-   * @example timestampToTime(1489525200000, true) -> "2017-03-15 05:00:00"
-   * @example timestampToTime(1489525200000, false) -> "2017-03-15"
-   * @example timestampToTime(1489525200000, true,2) -> "2017/03/15 05:00:00"
-   * @example timestampToTime(1489525200000, false,2) -> "2017/03/15"
-   */
-
-  function timestampToTime(timestamp) {
-    var needTime = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-    var format = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-    var date = new Date(timestamp);
-    var Y = date.getFullYear();
-    var M = padTime(date.getMonth() + 1);
-    var D = padTime(date.getDate());
-    var h = padTime(date.getHours());
-    var m = padTime(date.getMinutes());
-    var s = padTime(date.getSeconds());
-
-    switch (format) {
-      case 1:
-        return needTime ? "".concat(Y, "-").concat(M, "-").concat(D, " ").concat(h, ":").concat(m, ":").concat(s) : "".concat(Y, "-").concat(M, "-").concat(D);
-
-      case 2:
-        return needTime ? "".concat(D, "/").concat(M, "/").concat(Y, " ").concat(h, ":").concat(m, ":").concat(s) : "".concat(D, "/").concat(M, "/").concat(Y);
-
-      case 3:
-        return needTime ? "".concat(Y, "\u5E74").concat(M, "\u6708").concat(D, "\u65E5 ").concat(h, ":").concat(m, ":").concat(s) : "".concat(Y, "\u5E74").concat(M, "\u6708").concat(D);
-    }
-  }
-  /**
    *  将时间戳转换为日期
    * "使用Date(), 将时间戳转换转换为可读格式)."
    * @param {传入的时间戳} timestamp
    * @param {返回的格式 ('YYYY-MM-DD')} format
-   * Example1: timestampToTime(1489525200000, 'YYYY-MM-DD hh:mm:ss') -> "2017-03-15 05:00:00"
-   * Example2: timestampToTime(1489525200000, 'YYYY-MM-DD') -> "2017-03-15"
-   * Example3: timestampToTime(1489525200000, 'YYYY/MM/DD hh:mm:ss') -> "2017/03/15 05:00:00"
-   * Example4: timestampToTime(1489525200000, 'YYYY/MM/DD') -> "2017/03/15"
+   * @example timestampToTime(1489525200000, 'YYYY-MM-DD hh:mm:ss') -> "2017-03-15 05:00:00"
+   * @example timestampToTime(1489525200000, 'YYYY-MM-DD') -> "2017-03-15"
+   * @example timestampToTime(1489525200000, 'YYYY/MM/DD hh:mm:ss') -> "2017/03/15 05:00:00"
+   * @example timestampToTime(1489525200000, 'YYYY/MM/DD') -> "2017/03/15"
+   *
    */
 
-  function timestampToTime2(timestamp) {
+  var timestampToTime = function timestampToTime(timestamp) {
     var format = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'YYYY-MM-DD';
-    var date = new Date(timestamp);
+    var temp = Number(timestamp) || timestamp;
+    var date = new Date(temp);
     var obj = {
       YYYY: date.getFullYear(),
       M: date.getMonth() + 1,
@@ -672,7 +676,7 @@ var utils = (function (exports) {
     return format.replace(/(YYYY|MM?|DD?|hh?|mm?|ss?)/g, function (f) {
       return obj[f];
     });
-  }
+  };
   /**
    * 判断是否为闰年
    * @param  {number} year 要判断的年份
@@ -858,17 +862,16 @@ var utils = (function (exports) {
 
     return result;
   }
-  /***
+  /**
    *  返回本周第一天的时间
    *  @return {String} WeekFirstDay
    */
 
   function getWeekFirstDay() {
     var now = new Date();
-    var WeekFirstDay = new Date(now - (now.getDay() - 1) * ONE_DAY);
-    return WeekFirstDay;
+    return new Date(now - (now.getDay() - 1) * ONE_DAY);
   }
-  /***
+  /**
    *  返回本周最后一天的时间
    *  @return {String} WeekLastDay
    */
@@ -879,7 +882,7 @@ var utils = (function (exports) {
     var WeekLastDay = new Date((WeekFirstDay / 1000 + 6 * 86400) * 1000);
     return WeekLastDay;
   }
-  /***
+  /**
    *  返回本月第一天的时间
    *  @return {String} MonthFirstDay
    */
@@ -888,7 +891,7 @@ var utils = (function (exports) {
     var now = new Date();
     return new Date(now.getFullYear(), now.getMonth());
   }
-  /***
+  /**
    *  返回本月最后一天的时间
    *  @return {String} MonthLastDay
    */
@@ -1075,7 +1078,6 @@ var utils = (function (exports) {
     getMonthDays: getMonthDays,
     getDaysDiffBetweenDates: getDaysDiffBetweenDates,
     timestampToTime: timestampToTime,
-    timestampToTime2: timestampToTime2,
     isLeapYear: isLeapYear,
     getLeapYears: getLeapYears,
     timeToTimestamp: timeToTimestamp,
@@ -1474,14 +1476,14 @@ var utils = (function (exports) {
     }
   }
   /**
-   * 为promise对象新增个可拦截的方法
+   * 为promise对象增加可拦截的方法
    * @export
    * @param {*} promise 传递回来的promise对象
    * @returns
    * @example obj = canAbortPromise(promise)   obj.abort("abort this promise")
    */
 
-  function canAbortPromise(promise) {
+  function abortPromise(promise) {
     var res = null;
     var abort = null;
     var p1 = new Promise(function (resolve, reject) {
@@ -1492,7 +1494,7 @@ var utils = (function (exports) {
     promise.then(res, abort);
     return p1;
   }
-  function canAbortPromise2(promise) {
+  function abortPromise2(promise) {
     var obj = {};
     var p1 = new Promise(function (resolve, reject) {
       obj.resolve = resolve;
@@ -1536,14 +1538,76 @@ var utils = (function (exports) {
       }
     };
   }
+  /**
+   * 优先捕获async函数的错误, 使用时需要结构
+   * @export
+   * @param {Funcion} fn
+   * @returns {Array}
+   * @example async queryList(params){
+   *           const [error, res] = await errorCaptured(api(params))
+   *           if(error){
+   *             return Promise(error)  // 错误捕获
+   *           }
+   *           ....
+   *          }
+   */
+
+  function errorCaptured(_x) {
+    return _errorCaptured.apply(this, arguments);
+  }
+
+  function _errorCaptured() {
+    _errorCaptured = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(asyncFunc) {
+      var result;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _context.next = 3;
+              return asyncFunc;
+
+            case 3:
+              result = _context.sent;
+              return _context.abrupt("return", [null, result]);
+
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](0);
+              return _context.abrupt("return", [_context.t0, null]);
+
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 7]]);
+    }));
+    return _errorCaptured.apply(this, arguments);
+  }
+
+  function memorize(fn) {
+    var cache = new Map();
+    return function () {
+      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      var _args = JSON.stringify(args);
+
+      return cache.get(_args) || cache.set(_args, fn.apply(fn, args));
+    };
+  }
 
   var _function = /*#__PURE__*/Object.freeze({
     __proto__: null,
     copyToClipboard: copyToClipboard,
-    canAbortPromise: canAbortPromise,
-    canAbortPromise2: canAbortPromise2,
+    abortPromise: abortPromise,
+    abortPromise2: abortPromise2,
     executeConsumeTime: executeConsumeTime,
-    tco: tco
+    tco: tco,
+    errorCaptured: errorCaptured,
+    memorize: memorize
   });
 
   /*
@@ -7619,7 +7683,9 @@ var utils = (function (exports) {
     return '#' + n.slice(0, 6);
   } // 截取字符串并加身略号
 
-  function subText(str, length) {
+  function subText(str) {
+    var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+
     if (str.length === 0) {
       return '';
     }
@@ -7851,7 +7917,7 @@ var utils = (function (exports) {
   exports.date = date;
   exports.dom = dom;
   exports.file = file;
-  exports.foo = _function;
+  exports.func = _function;
   exports.http = http;
   exports.number = number;
   exports.object = object;
