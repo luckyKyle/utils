@@ -28,7 +28,6 @@
       }
     }
 
-
     function memorize(fn) {
       const cache = new Map()
       return function (...args) {
@@ -47,24 +46,30 @@
 
     const memoCalc = memorize(complexCalc)
 
+    function fibonacci(index) {
+      return index < 2 ? 1 : fibonacci(index - 1) + fibonacci(index - 2)
+    }
+
+    const fabo = memorize(fibonacci)
+
     console.time('start1=>')
-    memoCalc(662622, 822838)
+    fabo(30)
     console.timeEnd('start1=>')
 
     console.time('start2=>')
-    memoCalc(662622, 822838)
+    fabo(30)
     console.timeEnd('start2=>')
 
     console.time('start3=>')
-    memoCalc(662622, 822838)
+    fabo(30)
     console.timeEnd('start3=>')
 
     console.time('start4=>')
-    memoCalc(662622, 822838)
+    fabo(30)
     console.timeEnd('start4=>')
 
     console.time('start5=>')
-    memoCalc(662622, 822838)
+    fabo(30)
     console.timeEnd('start5=>')
   </script>
 </html>
