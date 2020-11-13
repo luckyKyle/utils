@@ -51,33 +51,35 @@ export function toCapitalLetter(str) {
  *
  * @export
  * @returns {void}
- * @example randomHexColorCode()   // #ade8b7
+ * @example randomHexColorCode()   // '#ade8b7'
  */
 export function randomHexColorCode() {
   const n = (Math.random() * 0xfffff * 1000000).toString(16)
   return '#' + n.slice(0, 6)
 }
 
-// 截取字符串并加身略号
-export function subText(str, length = 5) {
-  if (str.length === 0) {
-    return ''
-  }
-  if (str.length > length) {
-    return str.substr(0, length) + '...'
-  } else {
-    return str
-  }
+/**
+ * 截取字符串并加身略号
+ *
+ * @param { string } str 待转换的字符串
+ * @param { number } limit  字符串限制长度
+ * @example subText('abcdefghijk') // 'abcde...'
+ */
+export function subText(str, limit = 5) {
+  return str.length === 0 ? '' : str.length > limit ? str.substr(0, limit) + '...' : str
 }
 
 /**
  * 大小写转换
  *
  * @param { string } str 待转换的字符串
- * @param { number } type 1-全大写 2-全小写 3-首字母大写 其他-不转换
+ * @param { type = 1 } type 1-全大写 2-全小写 3-首字母大写 其他-不转换
+ * @example turnCase('abcDefg', 1) // 'ABCDEFG'
+ * @example turnCase('abcdefg', 2) // 'abcdefg'
+ * @example turnCase('abcdefg', 3) // 'Abcdefg'
  */
 
-export function turnCase(str, type) {
+export function turnCase(str, type = 1) {
   switch (type) {
     case 1:
       return str.toUpperCase()
@@ -106,35 +108,6 @@ export const escapeHTML = str => {
 }
 
 /**
- * 字符串长度截取
- * @export
- * @param {String} str 需要截取的字符串
- * @param {Number} len 指定长度
- * @returns {String}
- * @example cutString('这是一个十个字的长度',3)  // ‘这是一...’
- */
-export function cutString(str, len) {
-  let temp
-  let icount = 0
-  let patrn = /[^\x00-\xff]/
-  let strre = ''
-  for (const i = 0; i < str.length; i++) {
-    if (icount < len - 1) {
-      temp = str.substr(i, 1)
-      if (patrn.exec(temp) == null) {
-        icount = icount + 1
-      } else {
-        icount = icount + 2
-      }
-      strre += temp
-    } else {
-      break
-    }
-  }
-  return strre + '...'
-}
-
-/**
  * 单词截取
  * @export
  * @param {String} str 需要截取的字符串
@@ -146,4 +119,18 @@ export function cutString(str, len) {
 
 export function words(str, pattern = /[^a-zA-Z-]+/) {
   return str.split(pattern).filter(Boolean)
+}
+
+/**
+ * 获取指定长度的随机字符串
+ * @export
+ * @param {Number} length 指定长度，最大只能13位
+ * @returns {String}
+ * @example randomStr(10) // dd0190bf7b
+ * @example randomStr(3) // dd0190bf7b
+ */
+export function randomStr(length = 1) {
+  return Math.random()
+    .toString(16)
+    .substring(2, 2 + length)
 }

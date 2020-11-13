@@ -104,10 +104,6 @@ var utils = (function (exports) {
     return target;
   }
 
-  function _readOnlyError(name) {
-    throw new Error("\"" + name + "\" is read-only");
-  }
-
   function _toConsumableArray(arr) {
     return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
@@ -7675,35 +7671,38 @@ var utils = (function (exports) {
    *
    * @export
    * @returns {void}
-   * @example randomHexColorCode()   // #ade8b7
+   * @example randomHexColorCode()   // '#ade8b7'
    */
 
   function randomHexColorCode() {
     var n = (Math.random() * 0xfffff * 1000000).toString(16);
     return '#' + n.slice(0, 6);
-  } // 截取字符串并加身略号
+  }
+  /**
+   * 截取字符串并加身略号
+   *
+   * @param { string } str 待转换的字符串
+   * @param { number } limit  字符串限制长度
+   * @example subText('abcdefghijk') // 'abcde...'
+   */
 
   function subText(str) {
-    var length = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
-
-    if (str.length === 0) {
-      return '';
-    }
-
-    if (str.length > length) {
-      return str.substr(0, length) + '...';
-    } else {
-      return str;
-    }
+    var limit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+    return str.length === 0 ? '' : str.length > limit ? str.substr(0, limit) + '...' : str;
   }
   /**
    * 大小写转换
    *
    * @param { string } str 待转换的字符串
-   * @param { number } type 1-全大写 2-全小写 3-首字母大写 其他-不转换
+   * @param { type = 1 } type 1-全大写 2-全小写 3-首字母大写 其他-不转换
+   * @example turnCase('abcDefg', 1) // 'ABCDEFG'
+   * @example turnCase('abcdefg', 2) // 'abcdefg'
+   * @example turnCase('abcdefg', 3) // 'Abcdefg'
    */
 
-  function turnCase(str, type) {
+  function turnCase(str) {
+    var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+
     switch (type) {
       case 1:
         return str.toUpperCase();
@@ -7731,39 +7730,6 @@ var utils = (function (exports) {
     });
   };
   /**
-   * 字符串长度截取
-   * @export
-   * @param {String} str 需要截取的字符串
-   * @param {Number} len 指定长度
-   * @returns {String}
-   * @example cutString('这是一个十个字的长度',3)  // ‘这是一...’
-   */
-
-  function cutString(str, len) {
-    var temp;
-    var icount = 0;
-    var patrn = /[^\x00-\xff]/;
-    var strre = '';
-
-    for (var i = 0; i < str.length; _readOnlyError("i"), i++) {
-      if (icount < len - 1) {
-        temp = str.substr(i, 1);
-
-        if (patrn.exec(temp) == null) {
-          icount = icount + 1;
-        } else {
-          icount = icount + 2;
-        }
-
-        strre += temp;
-      } else {
-        break;
-      }
-    }
-
-    return strre + '...';
-  }
-  /**
    * 单词截取
    * @export
    * @param {String} str 需要截取的字符串
@@ -7777,6 +7743,19 @@ var utils = (function (exports) {
     var pattern = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : /[^a-zA-Z-]+/;
     return str.split(pattern).filter(Boolean);
   }
+  /**
+   * 获取指定长度的随机字符串
+   * @export
+   * @param {Number} length 指定长度，最大只能13位
+   * @returns {String}
+   * @example randomStr(10) // dd0190bf7b
+   * @example randomStr(3) // dd0190bf7b
+   */
+
+  function randomStr() {
+    var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    return Math.random().toString(16).substring(2, 2 + length);
+  }
 
   var string = /*#__PURE__*/Object.freeze({
     __proto__: null,
@@ -7787,8 +7766,8 @@ var utils = (function (exports) {
     subText: subText,
     turnCase: turnCase,
     escapeHTML: escapeHTML,
-    cutString: cutString,
-    words: words
+    words: words,
+    randomStr: randomStr
   });
 
   /*

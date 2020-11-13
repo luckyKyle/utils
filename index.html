@@ -12,7 +12,7 @@
   <script>
     const {
       func: { compose },
-      string: { toCapitalLetter, subText }
+      string: { toCapitalLetter, turnCase, subText, randomStr }
     } = window.utils
 
     function curry(func) {
@@ -52,24 +52,31 @@
 
     const fabo = memorize(fibonacci)
 
-    console.time('start1=>')
-    fabo(30)
-    console.timeEnd('start1=>')
+    console.log('==>', randomStr(14).length)
 
-    console.time('start2=>')
-    fabo(30)
-    console.timeEnd('start2=>')
+    let arr = [1, 2, 3, 3, 4, 45, 5, 7]
+    for (let i = arr.length; i--; ) {
+      console.log(arr[i])
+    }
 
-    console.time('start3=>')
-    fabo(30)
-    console.timeEnd('start3=>')
+    // console.time('start1=>')
+    // fabo(30)
+    // console.timeEnd('start1=>')
 
-    console.time('start4=>')
-    fabo(30)
-    console.timeEnd('start4=>')
+    // console.time('start2=>')
+    // fabo(30)
+    // console.timeEnd('start2=>')
 
-    console.time('start5=>')
-    fabo(30)
-    console.timeEnd('start5=>')
+    // console.time('start3=>')
+    // fabo(30)
+    // console.timeEnd('start3=>')
+
+    // console.time('start4=>')
+    // fabo(30)
+    // console.timeEnd('start4=>')
+
+    // console.time('start5=>')
+    // fabo(30)
+    // console.timeEnd('start5=>')
   </script>
 </html>
