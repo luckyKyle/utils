@@ -16,7 +16,7 @@ export function hideTag(...el) {
 }
 
 /**
- * 检查是否包含子元素
+ * 检测是否包含子元素
  * @param { element } parent
  * @param { element } child
  * 例：elementContains(document.querySelector('head'), document.querySelector('title')); // true
@@ -35,7 +35,7 @@ export function getStyle(el, ruleName) {
 }
 
 /**
- * 检查元素是否具有指定的类
+ * 检测元素是否具有指定的类
  * @param {dom}el 指定元素
  * @param {string}className 类名
  * @example hasClass(document.querySelector('p.special'), 'special') // true
@@ -181,10 +181,22 @@ export function scrollToTop() {
   }
 }
 
-// 检查页面底部是否可见
+// 检测页面底部是否可见
 export function bottomVisible() {
   return (
     document.documentElement.clientHeight + window.scrollY >=
     (document.documentElement.scrollHeight || document.documentElement.clientHeight)
   )
+}
+
+// 检测鼠标是否有选中内容
+export function hasSelectedContent() {
+  if (window.getSelection) {
+    return window.getSelection().toString() !== ''
+  } else if (document.getSelection) {
+    return document.getSelection().toString() !== ''
+  } else {
+    const selection = document.selection && document.selection.createRange()
+    return selection.text.toString() !== ''
+  }
 }
